@@ -2,7 +2,13 @@
 # Creates PID file, displays messages, handles signals
 echo $$ > /var/run/myscript.pid
 
-trap "echo 'I hate the kill command'; rm -f /var/run/myscript.pid; exit" SIGTERM SIGQUIT
+cleanup() {
+    rm -f /var/run/myscript.pid
+    exit
+}
+
+trap "echo 'I hate the kill command'; cleanup" SIGTERM
+trap "echo 'I hate the kill command'; cleanup" SIGQUIT
 trap "echo 'Y U no love me?!'" SIGINT
 
 while true
